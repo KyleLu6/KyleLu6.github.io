@@ -1,7 +1,920 @@
-<p>Hello 大家好</p>
-<p>我是KYLE，这是我的个人网站。 </p>
-<p>很高兴你来到这里, 你可以在以下的网站找到我</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyle (Sihan) Lu — AI Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0c;
+    --bg-card: #111114;
+    --bg-hover: #18181c;
+    --text: #e8e6e3;
+    --text-dim: #8a8880;
+    --text-muted: #5a5850;
+    --accent: #c9f059;
+    --accent-dim: #a8cc3a;
+    --accent-glow: rgba(201,240,89,0.08);
+    --blue: #5b9cf5;
+    --purple: #b48efa;
+    --orange: #f0a050;
+    --border: #222228;
+    --radius: 12px;
+  }
 
-<ul>
-  <li> <a href="https://kylelu6.github.io/">GitHub</a> </li>
-</ul>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) var(--bg);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+    overflow-x: hidden;
+  }
+
+  /* ===== GRAIN OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 128px;
+  }
+
+  /* ===== AMBIENT GRADIENT ===== */
+  .ambient {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 600px 400px at 15% 10%, rgba(201,240,89,0.04), transparent),
+      radial-gradient(ellipse 500px 500px at 85% 80%, rgba(91,156,245,0.03), transparent),
+      radial-gradient(ellipse 400px 300px at 50% 50%, rgba(180,142,250,0.02), transparent);
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,12,0.7);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: 22px;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-name span { color: var(--accent); }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 60px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-content { max-width: 720px; }
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+  .hero h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(48px, 7vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .hero-desc {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 560px;
+    line-height: 1.8;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+  .hero-links {
+    margin-top: 36px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+  .hero-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .hero-links a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-glow);
+  }
+  .hero-links a svg { width: 16px; height: 16px; }
+
+  /* Neural network decoration */
+  .hero-visual {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 340px;
+    height: 340px;
+    opacity: 0;
+    animation: fadeIn 1.5s ease forwards 1s;
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 60px;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    letter-spacing: -1px;
+    margin-bottom: 48px;
+    line-height: 1.15;
+  }
+
+  /* ===== RESEARCH INTERESTS ===== */
+  .interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .interest-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .interest-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--card-accent, var(--accent));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .interest-card:hover {
+    border-color: var(--card-accent, var(--accent));
+    transform: translateY(-4px);
+    background: var(--bg-hover);
+  }
+  .interest-card:hover::before { opacity: 1; }
+  .interest-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+    background: var(--accent-glow);
+  }
+  .interest-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: -0.3px;
+  }
+  .interest-card p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ===== RESEARCH TIMELINE ===== */
+  .timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--purple), var(--border));
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 48px;
+    padding: 28px 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: all 0.3s;
+  }
+  .timeline-item:hover {
+    border-color: #333;
+    transform: translateX(4px);
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 34px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+  }
+  .timeline-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-dim);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .timeline-item h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+  .timeline-org {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .timeline-item p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: all 0.3s;
+  }
+  .timeline-item:hover .tag {
+    border-color: #333;
+    color: var(--text-dim);
+  }
+
+  /* ===== TOOLS / SKILLS ===== */
+  .skills-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+  }
+  .skill-group h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+  }
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .skill-pill {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .skill-pill:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  /* ===== EDUCATION ===== */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .edu-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: all 0.3s;
+  }
+  .edu-card:hover {
+    border-color: #333;
+    transform: translateY(-2px);
+  }
+  .edu-degree {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .edu-school {
+    font-size: 14px;
+    color: var(--accent-dim);
+    margin-bottom: 12px;
+  }
+  .edu-detail {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  /* ===== PUBLICATIONS / PAPERS ===== */
+  .paper-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .paper-item {
+    padding: 24px 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: all 0.3s;
+  }
+  .paper-item:hover {
+    border-color: #333;
+    transform: translateX(4px);
+  }
+  .paper-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .status-wip {
+    color: var(--orange);
+    border: 1px solid rgba(240,160,80,0.3);
+    background: rgba(240,160,80,0.08);
+  }
+  .status-published {
+    color: var(--accent);
+    border: 1px solid rgba(201,240,89,0.3);
+    background: rgba(201,240,89,0.08);
+  }
+  .paper-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .paper-authors {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .paper-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ===== CONTACT ===== */
+  .contact-section {
+    text-align: center;
+    padding: 120px 60px;
+  }
+  .contact-section .section-title {
+    margin-bottom: 20px;
+  }
+  .contact-desc {
+    color: var(--text-dim);
+    font-size: 16px;
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .contact-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+  }
+  .contact-btn.primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .contact-btn.primary:hover {
+    background: var(--accent-dim);
+    box-shadow: 0 0 30px rgba(201,240,89,0.2);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+  .divider hr {
+    border: none;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .fade-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fade-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { gap: 20px; }
+    .nav-links a { font-size: 11px; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 60px 24px; }
+    .hero-visual { display: none; }
+    .contact-section { padding: 80px 24px; }
+    .divider { padding: 0 24px; }
+    footer { padding: 30px 24px; }
+    .timeline { padding-left: 32px; }
+    .timeline-item { padding: 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="#" class="nav-name">Kyle<span>.</span>Lu</a>
+  <div class="nav-links">
+    <a href="#research">Research</a>
+    <a href="#journey">Journey</a>
+    <a href="#papers">Papers</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">AI Researcher · Mechanistic Interpretability</div>
+    <h1>Kyle (Sihan) <em>Lu</em></h1>
+    <p class="hero-desc">
+      Aspiring AI researcher exploring how large language models <em style="color:var(--accent);font-style:normal;">think</em> — 
+      from circuit-level knowledge editing to multi-hop reasoning. 
+      Currently at the Algoverse AI Research Program under Dr. Kevin Zhu, 
+      working on mechanistic interpretability and knowledge editing in LLMs.
+    </p>
+    <div class="hero-links">
+      <a href="https://github.com/KyleLu6" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="mailto:kylelu@example.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        Email
+      </a>
+      <a href="#papers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Publications
+      </a>
+    </div>
+  </div>
+
+  <!-- Decorative Neural Network SVG -->
+  <svg class="hero-visual" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- connections -->
+    <g stroke="rgba(201,240,89,0.08)" stroke-width="1">
+      <line x1="50" y1="80" x2="170" y2="120"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/></line>
+      <line x1="50" y1="170" x2="170" y2="120"><animate attributeName="opacity" values="0.5;1;0.5" dur="4s" repeatCount="indefinite"/></line>
+      <line x1="50" y1="260" x2="170" y2="220"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="3.5s" repeatCount="indefinite"/></line>
+      <line x1="50" y1="170" x2="170" y2="220"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="5s" repeatCount="indefinite"/></line>
+      <line x1="50" y1="80" x2="170" y2="220"><animate attributeName="opacity" values="0.2;0.5;0.2" dur="6s" repeatCount="indefinite"/></line>
+      <line x1="170" y1="120" x2="290" y2="170"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="3.8s" repeatCount="indefinite"/></line>
+      <line x1="170" y1="220" x2="290" y2="170"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="4.2s" repeatCount="indefinite"/></line>
+    </g>
+    <!-- nodes -->
+    <g>
+      <circle cx="50" cy="80" r="6" fill="rgba(201,240,89,0.6)"><animate attributeName="r" values="5;7;5" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="50" cy="170" r="6" fill="rgba(201,240,89,0.6)"><animate attributeName="r" values="6;8;6" dur="4s" repeatCount="indefinite"/></circle>
+      <circle cx="50" cy="260" r="6" fill="rgba(201,240,89,0.6)"><animate attributeName="r" values="5;7;5" dur="3.5s" repeatCount="indefinite"/></circle>
+      <circle cx="170" cy="120" r="8" fill="rgba(91,156,245,0.6)"><animate attributeName="r" values="7;10;7" dur="4s" repeatCount="indefinite"/></circle>
+      <circle cx="170" cy="220" r="8" fill="rgba(91,156,245,0.6)"><animate attributeName="r" values="8;11;8" dur="3.5s" repeatCount="indefinite"/></circle>
+      <circle cx="290" cy="170" r="10" fill="rgba(180,142,250,0.7)"><animate attributeName="r" values="9;12;9" dur="5s" repeatCount="indefinite"/></circle>
+    </g>
+    <!-- labels -->
+    <text x="50" y="55" text-anchor="middle" fill="rgba(201,240,89,0.3)" font-family="JetBrains Mono" font-size="9">input</text>
+    <text x="170" y="95" text-anchor="middle" fill="rgba(91,156,245,0.3)" font-family="JetBrains Mono" font-size="9">hidden</text>
+    <text x="290" y="145" text-anchor="middle" fill="rgba(180,142,250,0.3)" font-family="JetBrains Mono" font-size="9">output</text>
+  </svg>
+</section>
+
+<!-- ===== RESEARCH INTERESTS ===== -->
+<div class="divider"><hr></div>
+<section id="research" class="fade-section">
+  <div class="section-label">01 — Research Interests</div>
+  <h2 class="section-title">What Drives My Research</h2>
+  <div class="interests-grid">
+    <div class="interest-card" style="--card-accent: var(--accent);">
+      <div class="interest-icon">🔬</div>
+      <h3>Mechanistic Interpretability</h3>
+      <p>Understanding the internal circuits of LLMs — how knowledge is stored, retrieved, and composed. Working with tools like Logit Lens, PatchScopes, Logit Flow, and Edge Attribution Patching (EAP) to reverse-engineer multi-hop reasoning.</p>
+    </div>
+    <div class="interest-card" style="--card-accent: var(--blue);">
+      <div class="interest-icon">✏️</div>
+      <h3>Knowledge Editing</h3>
+      <p>Precisely modifying factual knowledge within LLMs without full retraining. Studying ROME, MEMIT, CaKE, and circuit-aware editing methods that respect the model's internal knowledge circuits.</p>
+    </div>
+    <div class="interest-card" style="--card-accent: var(--purple);">
+      <div class="interest-icon">🧠</div>
+      <h3>Multi-hop Reasoning</h3>
+      <p>Investigating how LLMs chain multiple facts together for complex inference. Analyzing circuit-level failure modes and developing editing techniques that preserve reasoning integrity.</p>
+    </div>
+    <div class="interest-card" style="--card-accent: var(--orange);">
+      <div class="interest-icon">📊</div>
+      <h3>Time-Series Anomaly Detection</h3>
+      <p>Applying machine learning to real-time monitoring data. Built anomaly detection pipelines integrating Prometheus metrics with deep learning models for system health monitoring.</p>
+    </div>
+    <div class="interest-card" style="--card-accent: var(--blue);">
+      <div class="interest-icon">🤖</div>
+      <h3>LLMs for Applications</h3>
+      <p>Building practical AI systems — from CodeMate, an LLM-powered coding assistant, to exploring LLM deployment architectures with Azure AI Foundry and open-source models.</p>
+    </div>
+    <div class="interest-card" style="--card-accent: var(--accent);">
+      <div class="interest-icon">🎯</div>
+      <h3>Out-of-Distribution Detection</h3>
+      <p>Improving model robustness by detecting inputs that fall outside the training distribution — a foundational concern for deploying reliable AI in the real world.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== RESEARCH JOURNEY ===== -->
+<div class="divider"><hr></div>
+<section id="journey" class="fade-section">
+  <div class="section-label">02 — Research Journey</div>
+  <h2 class="section-title">From Circuits to Knowledge</h2>
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-date">2025 — Present</div>
+      <h3>CaKE: Circuit-aware Knowledge Editing</h3>
+      <div class="timeline-org">Algoverse AI Research Program · Dr. Kevin Zhu</div>
+      <p>Leading research on circuit-aware approaches to knowledge editing in LLMs. Developing methods that analyze and respect internal knowledge circuits when performing targeted factual edits, with a focus on preserving multi-hop reasoning capabilities.</p>
+      <div class="timeline-tags">
+        <span class="tag">Mechanistic Interpretability</span>
+        <span class="tag">Knowledge Editing</span>
+        <span class="tag">EAP</span>
+        <span class="tag">Logit Flow</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2024</div>
+      <h3>Time-Series Anomaly Detection</h3>
+      <div class="timeline-org">Shanghai Jiao Tong University · Graduation Thesis</div>
+      <p>Built anomaly detection systems for monitoring infrastructure, integrating openGemini time-series database with Prometheus metrics. Developed GPS data analysis pipelines for real-time system health monitoring.</p>
+      <div class="timeline-tags">
+        <span class="tag">openGemini</span>
+        <span class="tag">Prometheus</span>
+        <span class="tag">Deep Learning</span>
+        <span class="tag">Time Series</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2023 — 2024</div>
+      <h3>CodeMate: LLM Coding Assistant</h3>
+      <div class="timeline-org">APEX Lab · Shanghai Jiao Tong University</div>
+      <p>Developed an LLM-powered coding assistant leveraging large language models for intelligent code generation, completion, and debugging. Explored prompt engineering and model deployment for developer productivity.</p>
+      <div class="timeline-tags">
+        <span class="tag">LLM</span>
+        <span class="tag">Code Generation</span>
+        <span class="tag">APEX Lab</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2023</div>
+      <h3>Deep RL for Quantitative Trading</h3>
+      <div class="timeline-org">Shanghai Jiao Tong University</div>
+      <p>Applied deep reinforcement learning algorithms to financial markets, developing trading strategies that learn optimal portfolio allocation from historical market data.</p>
+      <div class="timeline-tags">
+        <span class="tag">Deep RL</span>
+        <span class="tag">Quantitative Finance</span>
+        <span class="tag">Portfolio Optimization</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-date">2022 — 2023</div>
+      <h3>OOD Detection Research</h3>
+      <div class="timeline-org">Shanghai Jiao Tong University</div>
+      <p>Studied out-of-distribution detection methods to improve model robustness and reliability, laying the groundwork for understanding model failure modes and internal representations.</p>
+      <div class="timeline-tags">
+        <span class="tag">OOD Detection</span>
+        <span class="tag">Model Robustness</span>
+        <span class="tag">Computer Vision</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== PAPERS ===== -->
+<div class="divider"><hr></div>
+<section id="papers" class="fade-section">
+  <div class="section-label">03 — Papers & Projects</div>
+  <h2 class="section-title">Selected Work</h2>
+  <div class="paper-list">
+
+    <div class="paper-item">
+      <span class="paper-status status-wip">In Progress</span>
+      <div class="paper-title">Circuit-aware Knowledge Editing for Multi-hop Reasoning in LLMs</div>
+      <div class="paper-authors">Kyle (Sihan) Lu, Jason Rich Darmawan, et al. · Algoverse AI Research Program</div>
+      <div class="paper-desc">Investigating how knowledge editing methods interact with internal reasoning circuits. Using Edge Attribution Patching and Logit Flow analysis to develop editing techniques that preserve multi-hop reasoning capabilities.</div>
+    </div>
+
+    <div class="paper-item">
+      <span class="paper-status status-published">Thesis 2024</span>
+      <div class="paper-title">Time-Series Anomaly Detection with openGemini and Deep Learning</div>
+      <div class="paper-authors">Kyle (Sihan) Lu · Shanghai Jiao Tong University</div>
+      <div class="paper-desc">Graduation thesis on applying deep learning models to real-time monitoring data, building anomaly detection pipelines integrating Prometheus metrics with time-series databases.</div>
+    </div>
+
+    <div class="paper-item">
+      <span class="paper-status status-wip">Ongoing Study</span>
+      <div class="paper-title">Reading & Reference Papers</div>
+      <div class="paper-authors">Key papers studied: ROME, MEMIT, CaKE, KELE, Reason-KE, PokeMQA, ForGet, Back Attention / Logit Flow (arXiv 2502.10835)</div>
+      <div class="paper-desc">Systematic review of knowledge editing and mechanistic interpretability literature, building a foundation for novel contributions to circuit-level understanding of LLMs.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== SKILLS & TOOLS ===== -->
+<div class="divider"><hr></div>
+<section id="skills" class="fade-section">
+  <div class="section-label">04 — Technical Skills</div>
+  <h2 class="section-title">Tools & Technologies</h2>
+  <div class="skills-container">
+    <div class="skill-group">
+      <h3>Languages</h3>
+      <div class="skill-list">
+        <span class="skill-pill">Python</span>
+        <span class="skill-pill">C/C++</span>
+        <span class="skill-pill">Verilog HDL</span>
+        <span class="skill-pill">JavaScript</span>
+        <span class="skill-pill">SQL</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>ML / AI Frameworks</h3>
+      <div class="skill-list">
+        <span class="skill-pill">PyTorch</span>
+        <span class="skill-pill">HuggingFace</span>
+        <span class="skill-pill">TransformerLens</span>
+        <span class="skill-pill">Transformer Architecture</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Interpretability Tools</h3>
+      <div class="skill-list">
+        <span class="skill-pill">Logit Lens</span>
+        <span class="skill-pill">PatchScopes</span>
+        <span class="skill-pill">Logit Flow</span>
+        <span class="skill-pill">Edge Attribution Patching</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Infrastructure</h3>
+      <div class="skill-list">
+        <span class="skill-pill">Azure AI Foundry</span>
+        <span class="skill-pill">Hadoop / Spark</span>
+        <span class="skill-pill">Prometheus</span>
+        <span class="skill-pill">Git</span>
+        <span class="skill-pill">Linux</span>
+        <span class="skill-pill">Conda</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Hardware & Systems</h3>
+      <div class="skill-list">
+        <span class="skill-pill">FPGA / RISC-V</span>
+        <span class="skill-pill">MIPS Pipeline (Verilog)</span>
+        <span class="skill-pill">Computer Networks</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Competitive Programming</h3>
+      <div class="skill-list">
+        <span class="skill-pill">LeetCode HOT100</span>
+        <span class="skill-pill">NOIP-style</span>
+        <span class="skill-pill">MCM/ICM 2021</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== EDUCATION ===== -->
+<div class="divider"><hr></div>
+<section class="fade-section">
+  <div class="section-label">05 — Education</div>
+  <h2 class="section-title">Academic Background</h2>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-degree">B.Eng. Computer Science & Technology</div>
+      <div class="edu-school">Shanghai Jiao Tong University (SJTU)</div>
+      <div class="edu-detail">
+        Coursework: Machine Learning, Cloud Computing (Hadoop/Spark), Computer Graphics, Computer Networks, FPGA/RISC-V Design. Built a complete pipelined MIPS processor in Verilog HDL. Founded Computer Fans Club. Huawei Campus Ambassador (2 years).
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-degree">Graduate Studies</div>
+      <div class="edu-school">Upcoming — 2025</div>
+      <div class="edu-detail">
+        Admitted to multiple programs including Dartmouth MEng AI, UC Berkeley, UIUC, and Peking University. Research focus: mechanistic interpretability with long-term goal of pursuing a PhD.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<div class="divider"><hr></div>
+<section id="contact" class="contact-section fade-section">
+  <div class="section-label">06 — Get in Touch</div>
+  <h2 class="section-title">Let's Connect</h2>
+  <p class="contact-desc">
+    I'm always open to discussing research ideas, collaboration opportunities, or just chatting about mechanistic interpretability and LLMs.
+  </p>
+  <div class="contact-links">
+    <a href="mailto:kylelu@example.com" class="contact-btn primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      Email Me
+    </a>
+    <a href="https://github.com/KyleLu6" target="_blank" class="contact-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      GitHub
+    </a>
+    <a href="https://scholar.google.com" target="_blank" class="contact-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Google Scholar
+    </a>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2025 Kyle (Sihan) Lu · Built with curiosity</p>
+</footer>
+
+<!-- ===== SCROLL ANIMATIONS ===== -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-section').forEach(el => observer.observe(el));
+
+  // Smooth nav scroll
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>
